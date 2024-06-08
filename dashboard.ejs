@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        /* Reset some basic elements for consistency across browsers */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f6f34e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            background-color: #fff9db;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #444;
+            font-size: 24px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Added style for search bar */
+        .search-bar {
+            margin-top: 20px;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        /* Added style for search button */
+        .search-button {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        /* Style for search button on hover */
+        .search-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Style for image container */
+        .image-container {
+            margin-top: 20px;
+        }
+
+        /* Style for individual images */
+        .bike-image {
+            width: 100%;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .search-bar {
+                font-size: 14px;
+            }
+
+            .search-button {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to your Dashboard, <%= username %>!</h2>
+        <p>Login successful!</p>
+        <!-- Added search bar -->
+        <input type="text" class="search-bar" id="searchInput" placeholder="Enter bike name...">
+        <!-- Added search button -->
+        <button class="search-button" onclick="search()">Search</button>
+        <!-- Image container to display search results -->
+        <div class="image-container" id="imageContainer"></div>
+    </div>
+
+    <script>
+        function search() {
+            var searchInput = document.getElementById("searchInput").value;
+            var apiUrl = 'https://api.unsplash.com/search/photos?query=' + encodeURIComponent(searchInput) + '&client_id=CVefW_SVgVh3l5UPjO_7RrZMGQ87d3ROxIHIwyCzYWI';
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    displayImages(data.results);
+                })
+                .catch(error => console.error('Error fetching images:', error));
+        }
+
+        function displayImages(images) {
+            var imageContainer = document.getElementById("imageContainer");
+            imageContainer.innerHTML = ''; // Clear previous results
+
+            images.forEach(image => {
+                var imgElement = document.createElement("img");
+                imgElement.src = image.urls.regular;
+                imgElement.classList.add("bike-image");
+                imageContainer.appendChild(imgElement);
+            });
+        }
+    </script>
+</body>
+</html>
+
